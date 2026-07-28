@@ -22,6 +22,21 @@ class Player:
     # adds currency automatically (used later for passive income)
     def earn_passive(self):
         self.currency += self.passive_income
+        
+# test code
+if __name__ == "__main__":
+    player = Player()
+
+    print("Starting currency:", player.currency)
+    
+    # adding currency
+    player.click()
+    print("After 1 click:", player.currency)
+
+    # altering click power adding currency
+    player.click_power = 5
+    player.click()
+    print("After click power upgrade + 1 click:", player.currency)
     
     
 
