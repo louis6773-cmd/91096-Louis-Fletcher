@@ -9,6 +9,8 @@ def main():
     window = tk.Tk()
     window.title("Clicker Game")
     window.geometry("450x250")
+    window.minsize(450, 250)
+    window.maxsize(450, 250)
 
     # title label at top
     title_label = tk.Label(window, text="Clicker Game", font=("Arial", 16, "bold"))
@@ -35,8 +37,18 @@ def main():
     upg_button1.place(x=280, y=55)
 
     upg_button2 = tk.Button(window, text="upg2\ncost: ??", width=12)
-    upg_button2.place(x=280, y=110)    
-
+    upg_button2.place(x=280, y=110)  
+    
+    upg_button3 = tk.Button(window, text="upg3\ncost: ??", width=12)
+    upg_button3.place(x=280, y=165)    
+    
+    # save/load buttons
+    save_button = tk.Button(window, text="save", width=7)
+    save_button.place(x=75, y=210)
+    
+    load_button = tk.Button(window, text="load", width=7)
+    load_button.place(x=140, y=210)
+    
     window.mainloop()
 
 if __name__ == "__main__":
