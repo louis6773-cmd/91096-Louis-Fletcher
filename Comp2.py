@@ -23,10 +23,29 @@ class Player:
     def earn_passive(self):
         self.currency += self.passive_income
         
+    # sets the player's name, with basic input validation
+    def set_name(self, name):
+        name = name.strip() 
+        
+        # reject empty input
+        if name == "":
+            print("Username invalid")
+            return False
+  
+        # check if username is too long
+        if len(name) > 15:
+            print("Name is too long (max 15")
+            return False
+        
+        self.name = name
+        return True
+        
+      
 # test code
 if __name__ == "__main__":
     player = Player()
 
+    # displaying current currency
     print("Starting currency:", player.currency)
     
     # adding currency
@@ -37,6 +56,11 @@ if __name__ == "__main__":
     player.click_power = 5
     player.click()
     print("After click power upgrade + 1 click:", player.currency)
-    
-    
-
+  
+    # test name input including boundary cases
+    print("Testing username:")
+    print("Valid name:", player.set_name("Louis"))
+    print("Empty name:", player.set_name("")) 
+    print("Spaces only:", player.set_name("   "))
+    print("Too long:", player.set_name("rgjdfjgdlfkjeeeee"))
+    print("Current name:", player.name)
