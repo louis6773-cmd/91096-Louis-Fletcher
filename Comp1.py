@@ -20,23 +20,27 @@ def main():
 
     # primary click button
     click_button1 = tk.Button(window, text="button", height=3, width=12)
-    click_button1.place(x=90, y=90)
+    click_button1.place(x=90, y=100)
 
     # coins display below the button
     coin_label = tk.Label(window, text="Coins: 0", font=("Arial", 11))
-    coin_label.place(x=105, y=160)
+    coin_label.place(x=105, y=170)
 
     # currency per click display below coins
     power_label = tk.Label(window, text="+1 / click", font=("Arial", 9), fg="gray")
-    power_label.place(x=110, y=185)
+    power_label.place(x=110, y=195)
     
     # upgrades section header
     upg_label = tk.Label(window, text="Upgrades", font=("Arial", 12, "underline"))
     upg_label.place(x=290, y=40)
     
     # username label 
-    user_label = tk.Label(window, text="Username: ", font=("Arial", 10,))
-    user_label.place(x=80, y=40)
+    user_label = tk.Label(window, text="Enter username: ", font=("Arial", 10,))
+    user_label.place(x=55, y=40)
+    
+    # username display
+    userdisplay_label = tk.Label(window, text="Username: __________", font=("Arial", 10))
+    userdisplay_label.place(x=55, y=60)
     
     # username entry box
     user_entry = tk.Entry(window, width=15)
