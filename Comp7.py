@@ -27,3 +27,24 @@ def save_game(player, filename="savefile.json"):
         json.dump(data, file)
 
     print("Game saved.")
+
+# loads player progress FROM a json file
+def load_game(filename="savefile.json"):
+    player = Player()
+    # try/except statements to access and extract the data, and starts new game if non existent
+    try:
+        with open(filename, "r") as file:
+            data = json.load(file)
+
+        player.name = data.get("name", "")
+        player.currency = data.get("currency", 0)
+        player.click_power = data.get("click_power", 1)
+        player.passive_income = data.get("passive_income", 0)
+
+        print("Game loaded.")
+
+    except FileNotFoundError:
+        print("No save file found, starting new game.")
+
+    return player
+
