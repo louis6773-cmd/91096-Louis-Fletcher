@@ -48,3 +48,18 @@ def load_game(filename="savefile.json"):
 
     return player
 
+# throaway test code
+if __name__ == "__main__":
+    player = Player()
+    player.name = "louis"
+    player.currency = 50
+    player.click_power = 3
+    player.passive_income = 2
+
+    save_game(player)
+
+    loaded_player = load_game()
+    print("Loaded name:", loaded_player.name)
+    print("Loaded currency:", loaded_player.currency)
+    print("Loaded click power:", loaded_player.click_power)
+    print("Loaded passive income:", loaded_player.passive_income)
