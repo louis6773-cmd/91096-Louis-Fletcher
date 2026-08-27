@@ -4,6 +4,10 @@ Final merge, completed clicker game, merging all components into one
 """
 import tkinter as tk
 import json
+from tkinter import messagebox
+
+MAX_USERNAME_LENGTH = 15
+PASSIVE_INCOME_INTERVAL = 1000
 
 # stores all the data about the player's progress
 class Player:
@@ -34,10 +38,9 @@ class Player:
             return False
 
         # check if username is too long
-        if len(name) > 15:
-            print("Name is too long (max 15)")
+        if len(name) > MAX_USERNAME_LENGTH:
+            print(f"Name is too long (max {MAX_USERNAME_LENGTH})")
             return False
-
         self.name = name
         return True
 
@@ -122,7 +125,7 @@ def main():
     title_label.place(x=80, y=10)
 
     # coins display below the button
-    coin_label = tk.Label(window, text="Coins: 0", font=("Arial", 11))
+    coin_label = tk.Label(window, text="Credits: 0", font=("Arial", 11))
     coin_label.place(x=105, y=170)
 
     # currency per click display below coins
@@ -131,19 +134,19 @@ def main():
 
     # upgrades section header
     upg_label = tk.Label(window, text="Upgrades", font=("Arial", 12, "underline"))
-    upg_label.place(x=290, y=40)
+    upg_label.place(x=305, y=40)
 
     # username label
     user_label = tk.Label(window, text="Username: ", font=("Arial", 10))
     user_label.place(x=10, y=40)
 
     # username display
-    userdisplay_label = tk.Label(window, text="Username: __________", font=("Arial", 10))
+    userdisplay_label = tk.Label(window, text="Username: ___________", font=("Arial", 10))
     userdisplay_label.place(x=10, y=60)
 
     # username entry box
     user_entry = tk.Entry(window, width=12)
-    user_entry.place(x=95, y=42)
+    user_entry.place(x=85, y=42)
 
     # new feedback label
     status_label = tk.Label(window, text="", font=("Arial", 9), fg="red")
@@ -160,18 +163,18 @@ def main():
 
     # sets up button
     set_name_button = tk.Button(window, text="Set", width=6, command=on_set_name)
-    set_name_button.place(x=205, y=40)
+    set_name_button.place(x=195, y=40)
 
     # function runs everytime button is pressed
     def on_click():
         # adds currency using the player's click power
         player.click()
         # updates the coin label so the change shows straight away
-        coin_label.config(text="Coins: " + str(player.currency))
+        coin_label.config(text="Credits: " + str(player.currency))
 
     # primary click button linked to the on_click function
-    click_button1 = tk.Button(window, text="🟢BUTTON🟢", height=3, width=12, command=on_click)
-    click_button1.place(x=90, y=100)
+    click_button1 = tk.Button(window, text="🟢STUDY🟢", height=3, width=12, command=on_click)
+    click_button1.place(x=90, y=110)
 
     # checks whether the player can afford the upgrade
     def buy_upgrade(upgrade, button):
@@ -200,39 +203,41 @@ def main():
                 start_passive_income()
         else:
             # gives feedback instead of disabling the button
-            status_label.config(text="Not enough currency")
+            status_label.config(text="Not enough credits, study more!")
 
-    # creates all 4 upgrade buttons in a LOOP, u=upgrade and b=btn - avoids lambda bug
+    # creates all 4 upgrade buttons in a LOOP, u=upgrade and b=btn and avoids lambda bug
     upgrade_buttons = []
     y_position = 65
     for upgrade in upgrades:
-        btn = tk.Button(window, text=upgrade.name + "\ncost: " + str(upgrade.cost), width=14)
+        btn = tk.Button(window, text=upgrade.name + "\ncost: " + str(upgrade.cost), width=18)
         btn.config(command=lambda u=upgrade, b=btn: buy_upgrade(u, b))
         btn.place(x=280, y=y_position)
         upgrade_buttons.append(btn)
         y_position += 50
         
         
-    # tracks whether the passive income loop has already started
+    # trakcs whether the passive income loop has already started
     loop_started = False
     # for autoclicker , adds passive income and updates label
     def passive_tick():
         player.earn_passive()
         coin_label.config(text="Coins: " + str(player.currency))
-        window.after(1000, passive_tick)
+        window.after(PASSIVE_INCOME_INTERVAL, passive_tick)
 
     # only starts the loop if it hasn't already been started
     def start_passive_income():
         nonlocal loop_started
         if not loop_started:
             loop_started = True
-            passive_tick()
-            
+            passive_income()
 
     # save/load feature, links the save/load functions to the GUI buttons
     def on_save():
-        save_game(player, upgrades)
-        status_label.config(text="Game saved")
+        # confirms whether user actually wants to save
+        confirm = messagebox.askyesno("Confirm save","Overwrite existing save file?")
+        if confirm:
+            save_game(player, upgrades)
+            status_label.config(text="Game saved")
 
     def on_load():
         loaded_player = load_game(upgrades)
@@ -259,13 +264,18 @@ def main():
         status_label.config(text="Game loaded")
 
     # save/load buttons
-    save_button = tk.Button(window, text="save", width=7, command=on_save)
+    save_button = tk.Button(window, text="Save", width=7, command=on_save)
     save_button.place(x=75, y=250)
 
-    load_button = tk.Button(window, text="load", width=7, command=on_load)
+    load_button = tk.Button(window, text="Load", width=7, command=on_load)
     load_button.place(x=140, y=250)
+    
+    # spacebar also counts as 1 click
+    window.bind("<space>", lambda event: on_click())
+    
 
     window.mainloop()
+
 
 
 if __name__ == "__main__":
